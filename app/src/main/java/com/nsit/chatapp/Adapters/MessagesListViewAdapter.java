@@ -16,13 +16,10 @@ public class MessagesListViewAdapter extends RecyclerView.Adapter<MessagesListVi
 
     private ArrayList<MessageDTO> messageDTOArrayList;
     private Context context;
-    private int count;
 
-    public MessagesListViewAdapter(ArrayList<MessageDTO> messageDTOArrayList, Context context, int count) {
+    public MessagesListViewAdapter(ArrayList<MessageDTO> messageDTOArrayList, Context context) {
         this.messageDTOArrayList = messageDTOArrayList;
         this.context = context;
-        this.count = count;
-        System.out.println("Count is :"+count);
     }
 
     @Override

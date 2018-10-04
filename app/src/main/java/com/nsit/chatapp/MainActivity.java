@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         relativeLayout.addView(progressBar);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        final MessagesListViewAdapter adapter = new MessagesListViewAdapter(messageDTOArrayList,this,count);
+        final MessagesListViewAdapter adapter = new MessagesListViewAdapter(messageDTOArrayList,this);
 
         messageRecyclerView.setLayoutManager(layoutManager);
         messageRecyclerView.setAdapter(adapter);
