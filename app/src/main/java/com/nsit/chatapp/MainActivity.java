@@ -1,14 +1,21 @@
 package com.nsit.chatapp;
 
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -28,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView messageRecyclerView;
     private EditText messageEditText;
     private Button sendMessageBtn;
+    private RelativeLayout relativeLayout;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -39,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         return databaseReference.push().getRef();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +56,17 @@ public class MainActivity extends AppCompatActivity {
         messageRecyclerView = findViewById(R.id.messageRecyclerView);
         messageEditText = findViewById(R.id.messageEditText);
         sendMessageBtn = findViewById(R.id.sendMessageBtn);
+        relativeLayout = findViewById(R.id.relativeLayout);
         messageDTOArrayList = new ArrayList<>();
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference().child("Messages");
+
+        final ProgressBar progressBar = new ProgressBar(MainActivity.this);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(130,130);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        progressBar.setLayoutParams(params);
+        relativeLayout.addView(progressBar);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         final MessagesListViewAdapter adapter = new MessagesListViewAdapter(messageDTOArrayList,this,count);
@@ -61,20 +77,16 @@ public class MainActivity extends AppCompatActivity {
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                progressBar.setVisibility(View.VISIBLE);
+
                 MessageDTO messageDTO = new MessageDTO((HashMap<String, String>) Objects.requireNonNull(dataSnapshot.getValue()));
                 messageDTOArrayList.add(messageDTO);
 
-                System.out.println("Username is "+messageDTO.getUsername());
-                System.out.println("Message is "+messageDTO.getMessage());
-
-                System.out.println("************");
-                System.out.println("Count is : "+dataSnapshot.toString());
-
                 count++;
                 adapter.notifyDataSetChanged();
-//                assert messageDTO != null;
-//                System.out.println(messageDTO.getUsername());
-//                System.out.println(messageDTO.getMessage());
+
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -105,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 count=0;
                 if(message.length()>0){
                     DatabaseReference newDatabaseReference = getNewDatabaseReference();
-                    newDatabaseReference.child("username").setValue("Sanjay");
+                    newDatabaseReference.child("username").setValue("Rajesh");
                     newDatabaseReference.child("message").setValue(message);
                     messageEditText.setText("");
                     Toast.makeText(MainActivity.this,"Message Sent!",Toast.LENGTH_SHORT).show();
