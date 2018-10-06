@@ -1,5 +1,7 @@
 package com.nsit.chatapp;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -47,11 +49,22 @@ public class MainActivity extends AppCompatActivity {
         return databaseReference.push().getRef();
     }
 
+    private void readFromSharedPreference(){
+        SharedPreferences sharedPreferences = getSharedPreferences("User Details",MODE_PRIVATE);
+        if (!sharedPreferences.contains("phoneNumber")){
+            Intent intent = new Intent(this,LogInScreen.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        readFromSharedPreference();
 
         messageRecyclerView = findViewById(R.id.messageRecyclerView);
         messageEditText = findViewById(R.id.messageEditText);

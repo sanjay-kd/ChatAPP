@@ -27,6 +27,7 @@ public class PhoneVerification extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private String verificationCode;
     private ProgressDialog progressDialog;
+    private String completePhoneNumber;
 
     private void createProgressDailog(){
         progressDialog = new ProgressDialog(PhoneVerification.this);
@@ -53,7 +54,7 @@ public class PhoneVerification extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        String completePhoneNumber = countryCode+"-"+phoneNumber;
+        completePhoneNumber = countryCode+"-"+phoneNumber;
 
         verificationSentTextView.setText("Please type the verification code sent to "+completePhoneNumber);
 
@@ -112,6 +113,7 @@ public class PhoneVerification extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     Intent intent = new Intent(PhoneVerification.this,ProfileInfoSignUp.class);
+                    intent.putExtra("phoneNumber",completePhoneNumber);
                     startActivity(intent);
                 }
                 else{
