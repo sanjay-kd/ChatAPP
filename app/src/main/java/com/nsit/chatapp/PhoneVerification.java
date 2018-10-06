@@ -23,9 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PhoneVerification extends AppCompatActivity {
 
-    private TextView verificationSentTextView;
     private EditText verificationCodeEditText;
-    private Button continueBtn;
     private FirebaseAuth mAuth;
     private String verificationCode;
     private ProgressDialog progressDialog;
@@ -49,9 +47,9 @@ public class PhoneVerification extends AppCompatActivity {
         String phoneNumber = intent.getStringExtra("phoneNumber");
 
         Button backBtn = findViewById(R.id.backBtn);
-        verificationSentTextView = findViewById(R.id.verificationSentTextView);
+        TextView verificationSentTextView = findViewById(R.id.verificationSentTextView);
         verificationCodeEditText = findViewById(R.id.verificationCodeEditText);
-        continueBtn = findViewById(R.id.continueBtn);
+        Button continueBtn = findViewById(R.id.continueBtn);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -113,7 +111,7 @@ public class PhoneVerification extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Intent intent = new Intent(PhoneVerification.this,MainActivity.class);
+                    Intent intent = new Intent(PhoneVerification.this,ProfileInfoSignUp.class);
                     startActivity(intent);
                 }
                 else{
