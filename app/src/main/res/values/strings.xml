@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Chat App</string>
+    <string-array name="country_codes">
+        <item>India (+91)</item>
+        <item>USA (+1)</item>
+        <item>UK (+44)</item>
+        <item>Mexico (+52)</item>
+        <item>China (+86)</item>
+    </string-array>
 </resources>

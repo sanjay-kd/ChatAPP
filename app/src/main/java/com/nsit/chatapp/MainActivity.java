@@ -80,7 +80,12 @@ public class MainActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                MessageDTO messageDTO = new MessageDTO((HashMap<String, String>) Objects.requireNonNull(dataSnapshot.getValue()));
+                MessageDTO messageDTO = dataSnapshot.getValue(MessageDTO.class);
+
+                if (messageDTO != null) {
+                    System.out.println("MessageDTO is : "+messageDTO.getMessage());
+                }
+
                 messageDTOArrayList.add(messageDTO);
 
                 count++;

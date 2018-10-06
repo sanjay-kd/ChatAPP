@@ -7,9 +7,8 @@ public class MessageDTO {
     private String username;
     private String message;
 
-    public MessageDTO(HashMap<String,String> map) {
-        this.username = map.get("username");
-        this.message = map.get("message");
+    public MessageDTO(){
+
     }
 
     public String getUsername() {
