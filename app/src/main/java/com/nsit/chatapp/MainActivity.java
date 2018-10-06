@@ -11,21 +11,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -34,15 +29,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.nsit.chatapp.Adapters.MessagesListViewAdapter;
 import com.nsit.chatapp.DTO.MessageDTO;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,6 +56,18 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseReference getNewDatabaseReference(){
         return databaseReference.push().getRef();
+    }
+
+    private void settingSharedPreferences(boolean isNotificationON){
+        SharedPreferences sharedPreferences = getSharedPreferences("Settings",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isNotificationON",isNotificationON);
+        editor.commit();
+    }
+
+    private boolean readFromSettingSharedPreference(){
+        SharedPreferences sharedPreferences = getSharedPreferences("Settings",MODE_PRIVATE);
+        return sharedPreferences.getBoolean("isNotificationON",true);
     }
 
     private void readFromSharedPreference(){
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         searchConversationsEditText = findViewById(R.id.searchConversationsEditText);
         messageDTOArrayList = new ArrayList<>();
 
-
+        // this download the image from file storage and uploads it to profileImageView
        storageReference.child("profile_images/"+firebaseAuth.getUid()+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
            @Override
            public void onSuccess(Uri uri) {
@@ -192,7 +194,14 @@ public class MainActivity extends AppCompatActivity {
         notificationsImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Toogle notification ... On tap mute complete whatsapp means no chat can show message
+                if (readFromSettingSharedPreference()){
+                    settingSharedPreferences(false);
+                    notificationsImageView.setImageResource(R.drawable.notification_mute_icon);
+                }
+                else{
+                    settingSharedPreferences(true);
+                    notificationsImageView.setImageResource(R.drawable.notification_unmute_icon);
+                }
             }
         });
     }
