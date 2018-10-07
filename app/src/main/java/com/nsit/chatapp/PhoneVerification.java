@@ -74,8 +74,9 @@ public class PhoneVerification extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
+                System.out.println("EXCEPTION IS :"+e.toString());
                 Toast.makeText(PhoneVerification.this,
-                        "Some error occurred while verifying your mobile number. Please try again",
+                        e.getMessage(),
                         Toast.LENGTH_LONG)
                         .show();
             }
@@ -111,12 +112,14 @@ public class PhoneVerification extends AppCompatActivity {
         mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                System.out.println("TASK IS : "+task);
                 if(task.isSuccessful()){
                     Intent intent = new Intent(PhoneVerification.this,ProfileInfoSignUp.class);
                     intent.putExtra("phoneNumber",completePhoneNumber);
                     startActivity(intent);
                 }
                 else{
+                    System.out.println("Error : "+task.getException().toString());
                     System.out.println("Some error occurred please try after some time");
                 }
             }

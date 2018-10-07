@@ -13,15 +13,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.net.URI;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class ProfileInfoSignUp extends AppCompatActivity {
@@ -33,6 +39,15 @@ public class ProfileInfoSignUp extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
+
+    private void addUserToDatabase(String username, String completePhoneNumber){
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference().child("Users");
+        databaseReference = databaseReference.push();
+        databaseReference.child("uid").setValue(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid());
+        databaseReference.child("username").setValue(username);
+        databaseReference.child("phoneNumber").setValue(completePhoneNumber);
+    }
 
     private void saveUserDetails(){
         SharedPreferences sharedPreferences = getSharedPreferences("User Details",MODE_PRIVATE);
@@ -70,6 +85,7 @@ public class ProfileInfoSignUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 username = usernameEditText.getText().toString();
+                addUserToDatabase(username,completePhoneNumber);
                 saveUserDetails();
                 Intent intent = new Intent(ProfileInfoSignUp.this,MainActivity.class);
                 startActivity(intent);

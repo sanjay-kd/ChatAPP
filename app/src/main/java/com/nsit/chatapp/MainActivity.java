@@ -7,6 +7,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,19 +44,21 @@ public class MainActivity extends AppCompatActivity {
     private ImageView profileIconImageview;
     private ImageView notificationsImageView;
     private EditText searchConversationsEditText;
+    private FloatingActionButton sendMessageFromContactsBtn;
 
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
+    private DatabaseReference messageDatabaseReference;
+    private DatabaseReference userDatabaseReference;
     private StorageReference storageReference;
     private FirebaseAuth firebaseAuth;
-
     private ProgressBar progressBar;
+    private String uniqueReference = null;
 
     private int count=1;
     private ArrayList<MessageDTO> messageDTOArrayList;
 
-    private DatabaseReference getNewDatabaseReference(){
-        return databaseReference.push().getRef();
+    private DatabaseReference getNewMessageDatabaseReference(){
+        return messageDatabaseReference.push().getRef();
     }
 
     private void settingSharedPreferences(boolean isNotificationON){
@@ -77,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
+        else{
+            uniqueReference = sharedPreferences.getString("uniqueReference","");
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -88,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         readFromSharedPreference();
 
         firebaseAuth = FirebaseAuth.getInstance();
-        storageReference = FirebaseStorage.getInstance().getReference();
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
         messageRecyclerView = findViewById(R.id.messageRecyclerView);
         messageEditText = findViewById(R.id.messageEditText);
@@ -97,19 +103,21 @@ public class MainActivity extends AppCompatActivity {
         profileIconImageview = findViewById(R.id.profileIconImageview);
         notificationsImageView = findViewById(R.id.notificationsImageView);
         searchConversationsEditText = findViewById(R.id.searchConversationsEditText);
+        sendMessageFromContactsBtn = findViewById(R.id.sendMessageFromContactsBtn);
         messageDTOArrayList = new ArrayList<>();
 
-        // this download the image from file storage and uploads it to profileImageView
-       storageReference.child("profile_images/"+firebaseAuth.getUid()+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-           @Override
-           public void onSuccess(Uri uri) {
-                System.out.println("Uri is :"+uri);
-               Glide.with(MainActivity.this).load(uri).into(profileIconImageview);
-           }
-       });
+        messageDatabaseReference = firebaseDatabase.getReference().child("Messages");
+        userDatabaseReference = firebaseDatabase.getReference().child("Users");
+        storageReference = FirebaseStorage.getInstance().getReference();
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference().child("Messages");
+        // this download the image from file storage and uploads it to profileImageView
+        storageReference.child("profile_images/"+firebaseAuth.getUid()+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                System.out.println("Uri is :"+uri);
+                Glide.with(MainActivity.this).load(uri).into(profileIconImageview);
+            }
+        });
 
         progressBar = new ProgressBar(MainActivity.this);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(130,130);
@@ -123,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         messageRecyclerView.setLayoutManager(layoutManager);
         messageRecyclerView.setAdapter(adapter);
 
-        databaseReference.addChildEventListener(new ChildEventListener() {
+        messageDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
@@ -170,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                 String message  = messageEditText.getText().toString().trim();
                 count=0;
                 if(message.length()>0){
-                    DatabaseReference newDatabaseReference = getNewDatabaseReference();
+                    DatabaseReference newDatabaseReference = getNewMessageDatabaseReference();
                     newDatabaseReference.child("username").setValue("Rajesh");
                     newDatabaseReference.child("message").setValue(message);
                     messageEditText.setText("");
@@ -204,6 +212,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        sendMessageFromContactsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
     }
 
 }
