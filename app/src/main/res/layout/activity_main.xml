@@ -99,55 +99,47 @@
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
             <RelativeLayout
                 android:id="@+id/relativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_height="match_parent">
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/messageRecyclerView"
+                    android:id="@+id/chatsRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#F8F9FC"
                     android:nestedScrollingEnabled="false"/>
             </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="10dp">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:layout_margin="10dp">-->
 
-                <EditText
-                    android:id="@+id/messageEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/round_design"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:padding="15dp"
-                    android:maxLines="1"
-                    android:inputType="text"
-                    android:hint="Enter message to send.."
-                    android:textColorHint="#A6000000"/>
+                <!--<EditText-->
+                    <!--android:id="@+id/messageEditText"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="50dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:background="@drawable/round_design"-->
+                    <!--android:textColor="@color/colorPrimaryDark"-->
+                    <!--android:padding="15dp"-->
+                    <!--android:maxLines="1"-->
+                    <!--android:inputType="text"-->
+                    <!--android:hint="Enter message to send.."-->
+                    <!--android:textColorHint="#A6000000"/>-->
 
-                <Button
-                    android:id="@+id/sendMessageBtn"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/send_button_design"/>
+                <!--<Button-->
+                    <!--android:id="@+id/sendMessageBtn"-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_marginStart="10dp"-->
+                    <!--android:layout_marginEnd="5dp"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:layout_marginBottom="5dp"-->
+                    <!--android:background="@drawable/send_button_design"/>-->
 
-            </LinearLayout>
-
-        </LinearLayout>
+            <!--</LinearLayout>-->
 
     </android.support.v4.widget.NestedScrollView>
 

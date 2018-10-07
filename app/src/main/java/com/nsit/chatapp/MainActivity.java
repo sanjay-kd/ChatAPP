@@ -30,14 +30,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.nsit.chatapp.Adapters.ChatsRecyclerViewAdapter;
 import com.nsit.chatapp.Adapters.MessagesListViewAdapter;
+import com.nsit.chatapp.DTO.ChatsDTO;
 import com.nsit.chatapp.DTO.MessageDTO;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView messageRecyclerView;
+    private RecyclerView chatsRecyclerView;
     private EditText messageEditText;
     private Button sendMessageBtn;
     private RelativeLayout relativeLayout;
@@ -96,9 +98,9 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-        messageRecyclerView = findViewById(R.id.messageRecyclerView);
-        messageEditText = findViewById(R.id.messageEditText);
-        sendMessageBtn = findViewById(R.id.sendMessageBtn);
+        chatsRecyclerView = findViewById(R.id.chatsRecyclerView);
+//        messageEditText = findViewById(R.id.messageEditText);
+//        sendMessageBtn = findViewById(R.id.sendMessageBtn);
         relativeLayout = findViewById(R.id.relativeLayout);
         profileIconImageview = findViewById(R.id.profileIconImageview);
         notificationsImageView = findViewById(R.id.notificationsImageView);
@@ -126,71 +128,86 @@ public class MainActivity extends AppCompatActivity {
         relativeLayout.addView(progressBar);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        final MessagesListViewAdapter adapter = new MessagesListViewAdapter(messageDTOArrayList,this);
+        ArrayList<ChatsDTO> chatsDTOArrayList = new ArrayList<>();
+        chatsDTOArrayList.add(new ChatsDTO("","Papa","","","+91-8750400103"));
+        chatsDTOArrayList.add(new ChatsDTO("","Manish Kumar","","",""));
+        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
+        chatsDTOArrayList.add(new ChatsDTO("","Sanjay Kumar","","",""));
+        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
+        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
+        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","",""));
+        chatsDTOArrayList.add(new ChatsDTO("","Papa","","","+91-8750400103"));
+        chatsDTOArrayList.add(new ChatsDTO("","Manish Kumar","","",""));
+        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
+        chatsDTOArrayList.add(new ChatsDTO("","Sanjay Kumar","","",""));
+        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
+        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
+        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","",""));
+        ChatsRecyclerViewAdapter chatsRecyclerViewAdapter = new ChatsRecyclerViewAdapter(chatsDTOArrayList,this);
 
-        messageRecyclerView.setLayoutManager(layoutManager);
-        messageRecyclerView.setAdapter(adapter);
+        chatsRecyclerView.setLayoutManager(layoutManager);
+        chatsRecyclerView.setAdapter(chatsRecyclerViewAdapter);
 
-        messageDatabaseReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//        messageDatabaseReference.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//                progressBar.setVisibility(View.VISIBLE);
+//
+//                MessageDTO messageDTO = dataSnapshot.getValue(MessageDTO.class);
+//
+//                if (messageDTO != null) {
+//                    System.out.println("MessageDTO is : "+messageDTO.getMessage());
+//                }
+//
+//                messageDTOArrayList.add(messageDTO);
+//
+//                count++;
+//                adapter.notifyDataSetChanged();
+//
+//                progressBar.setVisibility(View.GONE);
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
-                progressBar.setVisibility(View.VISIBLE);
-
-                MessageDTO messageDTO = dataSnapshot.getValue(MessageDTO.class);
-
-                if (messageDTO != null) {
-                    System.out.println("MessageDTO is : "+messageDTO.getMessage());
-                }
-
-                messageDTOArrayList.add(messageDTO);
-
-                count++;
-                adapter.notifyDataSetChanged();
-
-                progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        sendMessageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String message  = messageEditText.getText().toString().trim();
-                count=0;
-                if(message.length()>0){
-                    DatabaseReference newDatabaseReference = getNewMessageDatabaseReference();
-                    newDatabaseReference.child("username").setValue("Rajesh");
-                    newDatabaseReference.child("message").setValue(message);
-                    messageEditText.setText("");
-                    Toast.makeText(MainActivity.this,"Message Sent!",Toast.LENGTH_SHORT).show();
-                    System.out.println(messageDTOArrayList.size());
-                }
-                else{
-                    Toast.makeText(MainActivity.this,"Enter Message to send!",Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
+//        sendMessageBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                String message  = messageEditText.getText().toString().trim();
+//                count=0;
+//                if(message.length()>0){
+//                    DatabaseReference newDatabaseReference = getNewMessageDatabaseReference();
+//                    newDatabaseReference.child("username").setValue("Rajesh");
+//                    newDatabaseReference.child("message").setValue(message);
+//                    messageEditText.setText("");
+//                    Toast.makeText(MainActivity.this,"Message Sent!",Toast.LENGTH_SHORT).show();
+//                    System.out.println(messageDTOArrayList.size());
+//                }
+//                else{
+//                    Toast.makeText(MainActivity.this,"Enter Message to send!",Toast.LENGTH_SHORT).show();
+//                }
+//
+//            }
+//        });
 
         profileIconImageview.setOnClickListener(new View.OnClickListener() {
             @Override
