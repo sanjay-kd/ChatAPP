@@ -28,12 +28,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.nsit.chatapp.Adapters.ChatsRecyclerViewAdapter;
 import com.nsit.chatapp.Adapters.MessagesListViewAdapter;
 import com.nsit.chatapp.DTO.ChatsDTO;
 import com.nsit.chatapp.DTO.MessageDTO;
+import com.nsit.chatapp.DTO.UsersDTO;
 
 import java.util.ArrayList;
 
@@ -58,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
     private int count=1;
     private ArrayList<MessageDTO> messageDTOArrayList;
+    private ArrayList<ChatsDTO> chatsDTOArrayList;
+    private ChatsRecyclerViewAdapter chatsRecyclerViewAdapter;
 
     private DatabaseReference getNewMessageDatabaseReference(){
         return messageDatabaseReference.push().getRef();
@@ -128,22 +132,43 @@ public class MainActivity extends AppCompatActivity {
         relativeLayout.addView(progressBar);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        ArrayList<ChatsDTO> chatsDTOArrayList = new ArrayList<>();
-        chatsDTOArrayList.add(new ChatsDTO("","Papa","","","+91-8750400103"));
-        chatsDTOArrayList.add(new ChatsDTO("","Manish Kumar","","",""));
-        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
-        chatsDTOArrayList.add(new ChatsDTO("","Sanjay Kumar","","",""));
-        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
-        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
-        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","",""));
-        chatsDTOArrayList.add(new ChatsDTO("","Papa","","","+91-8750400103"));
-        chatsDTOArrayList.add(new ChatsDTO("","Manish Kumar","","",""));
-        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
-        chatsDTOArrayList.add(new ChatsDTO("","Sanjay Kumar","","",""));
-        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
-        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
-        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","",""));
-        ChatsRecyclerViewAdapter chatsRecyclerViewAdapter = new ChatsRecyclerViewAdapter(chatsDTOArrayList,this);
+        chatsDTOArrayList = new ArrayList<>();
+
+        userDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                System.out.println(dataSnapshot.getChildrenCount());
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+                    ChatsDTO chatsDTO = dataSnapshot1.getValue(ChatsDTO.class);
+                    chatsDTOArrayList.add(chatsDTO);
+                    progressBar.setVisibility(View.GONE);
+                    chatsRecyclerViewAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println(databaseError);
+                Toast.makeText(MainActivity.this,databaseError.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+
+//        chatsDTOArrayList.add(new ChatsDTO("","Papa","","","+91-8750400103"));
+//        chatsDTOArrayList.add(new ChatsDTO("","Manish Kumar","","",""));
+//        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
+//        chatsDTOArrayList.add(new ChatsDTO("","Sanjay Kumar","","",""));
+//        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
+//        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
+//        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","",""));
+//        chatsDTOArrayList.add(new ChatsDTO("","Papa","","","+91-8750400103"));
+//        chatsDTOArrayList.add(new ChatsDTO("","Manish Kumar","","",""));
+//        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
+//        chatsDTOArrayList.add(new ChatsDTO("","Sanjay Kumar","","",""));
+//        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
+//        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","","+91-7593959201"));
+//        chatsDTOArrayList.add(new ChatsDTO("","Vikash Ola","","",""));
+
+        chatsRecyclerViewAdapter = new ChatsRecyclerViewAdapter(chatsDTOArrayList,this);
 
         chatsRecyclerView.setLayoutManager(layoutManager);
         chatsRecyclerView.setAdapter(chatsRecyclerViewAdapter);

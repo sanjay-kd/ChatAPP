@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OneToOneChatScreen"
+    android:orientation="vertical"
+    android:background="#F8F9FC">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#FFF"
+        app:contentInsetStart="0dp"
+        app:contentInsetEnd="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/oneToOneChatBackBtn"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/back_action_bar_icon"
+                android:padding="15dp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/friendName"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="Sanjay Kumar"
+                    android:textSize="18sp"
+                    android:textColor="#000"
+                    android:gravity="center|bottom"/>
+
+                <TextView
+                    android:id="@+id/friendOnlineStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="Online now"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/friendProfileImage"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:padding="9dp"
+                android:src="@drawable/user_default_icon"
+                app:civ_border_color="#ddd"
+                app:civ_border_width="2dp"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/oneToOneChatRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:background="#F8F9FC">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp">
+
+        <EditText
+            android:id="@+id/messageEditText"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/round_design"
+            android:textColor="@color/colorPrimaryDark"
+            android:padding="15dp"
+            android:maxLines="1"
+            android:inputType="text"
+            android:hint="Enter message to send.."
+            android:textColorHint="#A6000000"/>
+
+        <Button
+            android:id="@+id/sendMessageBtn"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/send_button_design"/>
+
+    </LinearLayout>
+
+</LinearLayout>

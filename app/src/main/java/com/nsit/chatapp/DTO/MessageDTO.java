@@ -6,9 +6,22 @@ public class MessageDTO {
 
     private String username;
     private String message;
+    private String timeStamp;
+    private String from;
+    private String to;
 
-    public MessageDTO(){
+//    public MessageDTO(String username, String message, String timeStamp) {
+//        this.username = username;
+//        this.message = message;
+//        this.timeStamp = timeStamp;
+//    }
 
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     public String getUsername() {
@@ -25,5 +38,32 @@ public class MessageDTO {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageDTO{" +
+                "username='" + username + '\'' +
+                ", message='" + message + '\'' +
+                ", timeStamp='" + timeStamp + '\'' +
+                ", from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                '}';
     }
 }

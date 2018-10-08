@@ -1,20 +1,23 @@
 package com.nsit.chatapp.DTO;
 
-public class ChatsDTO {
+import java.io.Serializable;
+
+public class ChatsDTO implements Serializable {
 
     private String profileImageURL;
     private String username;
     private String recentMessage;
     private String recentTime;
     private String phoneNumber;
+    private String uid;
 
-    public ChatsDTO(String profileImageURL, String username, String recentMessage, String recentTime, String phoneNumber) {
-        this.profileImageURL = profileImageURL;
-        this.username = username;
-        this.recentMessage = recentMessage;
-        this.recentTime = recentTime;
-        this.phoneNumber = phoneNumber;
-    }
+//    public ChatsDTO(String profileImageURL, String username, String recentMessage, String recentTime, String phoneNumber) {
+//        this.profileImageURL = profileImageURL;
+//        this.username = username;
+//        this.recentMessage = recentMessage;
+//        this.recentTime = recentTime;
+//        this.phoneNumber = phoneNumber;
+//    }
 
     public String getProfileImageURL() {
         return profileImageURL;
@@ -54,5 +57,13 @@ public class ChatsDTO {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

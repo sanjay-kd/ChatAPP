@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nsit.chatapp.R;
@@ -24,14 +25,13 @@ public class MessagesListViewAdapter extends RecyclerView.Adapter<MessagesListVi
 
     @Override
     public MessagesListViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.message_layout,null,false));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.message_layout,parent,false));
     }
 
     @Override
     public void onBindViewHolder(MessagesListViewAdapter.ViewHolder holder, int position) {
-        holder.messageTextView.setText(messageDTOArrayList.get(position).getMessage());
-        holder.usernameTextView.setText(messageDTOArrayList.get(position).getUsername());
-        holder.timeTextView.setText("11:45 PM");
+//        holder.friendMessageTextView.setText(messageDTOArrayList.get(position).getMessage());
+//        holder.timeTextView.setText("11:45 PM");
     }
 
     @Override
@@ -41,15 +41,14 @@ public class MessagesListViewAdapter extends RecyclerView.Adapter<MessagesListVi
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView messageTextView;
-        private TextView usernameTextView;
-        private TextView timeTextView;
+        private LinearLayout friendMessageLinearLayout;
+        private TextView friendMessageTextView;
+        private TextView friendMessageTimeTextView;
 
         ViewHolder(View itemView) {
             super(itemView);
-            messageTextView = itemView.findViewById(R.id.messageTextView);
-            usernameTextView = itemView.findViewById(R.id.usernameTextView);
-            timeTextView = itemView.findViewById(R.id.timeTextView);
+            friendMessageTextView = itemView.findViewById(R.id.friendMessageTextView);
+            friendMessageTimeTextView = itemView.findViewById(R.id.friendMessageTimeTextView);
         }
 
     }
