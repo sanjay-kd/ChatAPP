@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nsit.chatapp.R;
 
@@ -17,10 +19,12 @@ public class MessagesListViewAdapter extends RecyclerView.Adapter<MessagesListVi
 
     private ArrayList<MessageDTO> messageDTOArrayList;
     private Context context;
+    private String currentUserUID;
 
-    public MessagesListViewAdapter(ArrayList<MessageDTO> messageDTOArrayList, Context context) {
+    public MessagesListViewAdapter(ArrayList<MessageDTO> messageDTOArrayList, Context context, String currentUserUID) {
         this.messageDTOArrayList = messageDTOArrayList;
         this.context = context;
+        this.currentUserUID = currentUserUID;
     }
 
     @Override
@@ -30,8 +34,19 @@ public class MessagesListViewAdapter extends RecyclerView.Adapter<MessagesListVi
 
     @Override
     public void onBindViewHolder(MessagesListViewAdapter.ViewHolder holder, int position) {
-//        holder.friendMessageTextView.setText(messageDTOArrayList.get(position).getMessage());
-//        holder.timeTextView.setText("11:45 PM");
+        MessageDTO messageDTO = messageDTOArrayList.get(position);
+        if (messageDTO != null){
+            if (messageDTO.getFrom().equals(currentUserUID)){
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+                holder.friendMessageLinearLayout.setLayoutParams(layoutParams);
+            }
+            holder.friendMessageTextView.setText(messageDTO.getMessage());
+            holder.friendMessageTimeTextView.setText(messageDTO.getTimeStamp());
+        }
+        else{
+            Toast.makeText(context,"Start chat to see messages!",Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -47,6 +62,7 @@ public class MessagesListViewAdapter extends RecyclerView.Adapter<MessagesListVi
 
         ViewHolder(View itemView) {
             super(itemView);
+            friendMessageLinearLayout = itemView.findViewById(R.id.friendMessageLinearLayout);
             friendMessageTextView = itemView.findViewById(R.id.friendMessageTextView);
             friendMessageTimeTextView = itemView.findViewById(R.id.friendMessageTimeTextView);
         }
