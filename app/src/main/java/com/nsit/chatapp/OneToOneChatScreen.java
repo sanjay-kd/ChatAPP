@@ -62,6 +62,7 @@ public class OneToOneChatScreen extends AppCompatActivity {
                 messageDTOArrayList.add(messageDTO);
                 System.out.println("Message added : "+messageDTO.toString());
                 messagesListViewAdapter.notifyDataSetChanged();
+                oneToOneChatRecyclerView.scrollToPosition(oneToOneChatRecyclerView.getAdapter().getItemCount()-1);
             }
 
             @Override
@@ -104,6 +105,7 @@ public class OneToOneChatScreen extends AppCompatActivity {
                                     MessageDTO messageDTO = dataSnapshot2.getValue(MessageDTO.class);
                                     messageDTOArrayList.add(messageDTO);
                                     messagesListViewAdapter.notifyDataSetChanged();
+                                    oneToOneChatRecyclerView.scrollToPosition(oneToOneChatRecyclerView.getAdapter().getItemCount()-1);
                                     chatProgressBar.setVisibility(View.GONE);
                                 }
                             }
@@ -120,6 +122,7 @@ public class OneToOneChatScreen extends AppCompatActivity {
                             MessageDTO messageDTO = dataSnapshot2.getValue(MessageDTO.class);
                             messageDTOArrayList.add(messageDTO);
                             messagesListViewAdapter.notifyDataSetChanged();
+                            oneToOneChatRecyclerView.scrollToPosition(oneToOneChatRecyclerView.getAdapter().getItemCount()-1);
                             chatProgressBar.setVisibility(View.GONE);
                         }
                     }
@@ -156,6 +159,7 @@ public class OneToOneChatScreen extends AppCompatActivity {
         uniqueChatNode1 = currentUserUID + friendUID;
         uniqueChatNode2 =  friendUID + currentUserUID;
         layoutManager = new LinearLayoutManager(this);
+        ((LinearLayoutManager) layoutManager).setStackFromEnd(true);
 
         messageDTOArrayList = new ArrayList<>();
         messagesListViewAdapter = new MessagesListViewAdapter(messageDTOArrayList,this,currentUserUID);
