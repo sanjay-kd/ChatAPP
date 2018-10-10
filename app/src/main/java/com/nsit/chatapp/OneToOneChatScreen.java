@@ -52,6 +52,8 @@ public class OneToOneChatScreen extends AppCompatActivity {
     private String uniqueChatNode1;
     private String uniqueChatNode2;
 
+    private DatabaseReference messagesDatabaseReference;
+
     private void addMessage(DatabaseReference newDatabaseReference){
 
         newDatabaseReference.addChildEventListener(new ChildEventListener() {
@@ -88,7 +90,7 @@ public class OneToOneChatScreen extends AppCompatActivity {
     }
 
     private void printPastMessages(){
-        DatabaseReference messagesDatabaseReference = firebaseDatabase.getReference().child("chats").child(uniqueChatNode1);
+        messagesDatabaseReference = firebaseDatabase.getReference().child("chats").child(uniqueChatNode1);
 
         System.out.println("MessageDatabase ref : "+messagesDatabaseReference);
 
@@ -164,6 +166,10 @@ public class OneToOneChatScreen extends AppCompatActivity {
         messageDTOArrayList = new ArrayList<>();
         messagesListViewAdapter = new MessagesListViewAdapter(messageDTOArrayList,this,currentUserUID);
 
+        messagesDatabaseReference = firebaseDatabase.getReference().child("chats").child(uniqueChatNode2);
+        System.out.println("Message Db Ref : "+messagesDatabaseReference);
+
+
         oneToOneChatRecyclerView.setLayoutManager(layoutManager);
         oneToOneChatRecyclerView.setAdapter(messagesListViewAdapter);
 
@@ -217,6 +223,23 @@ public class OneToOneChatScreen extends AppCompatActivity {
         });
     }
 
+    private void readFriendIncomingMessage(final FirebaseCallbackForIncomingMessage FirebaseCallbackForIncomingMessage, DatabaseReference databaseReference){
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        MessageDTO messageDTO = dataSnapshot.getValue(MessageDTO.class);
+//                        messageDTOArrayList.add(messageDTO);
+//                        messagesListViewAdapter.notifyDataSetChanged();
+                FirebaseCallbackForIncomingMessage.onCallback(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void readMessages(final FirebaseCallback firebaseCallback){
 
         System.out.println("Unqiue ChatNode 1 : "+ uniqueChatNode1);
@@ -257,6 +280,7 @@ public class OneToOneChatScreen extends AppCompatActivity {
                         }
                     });
                 }
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -269,6 +293,10 @@ public class OneToOneChatScreen extends AppCompatActivity {
 
     private interface FirebaseCallback{
         public void onCallback(DatabaseReference databaseReference);
+    }
+
+    private interface FirebaseCallbackForIncomingMessage{
+        public void onCallback(DataSnapshot dataSnapshot);
     }
 
 }
